@@ -1,3 +1,4 @@
+
 class RimMul:
     def __init__(self, string):
         self.string = string
@@ -23,7 +24,7 @@ class RimMul:
         num2 = self.to_num(other.string)
         return RimMul(self.to_rim(num1 - num2))
 
-    def __divmod__(self, other):
+    def __truediv__(self, other):
         num1 = self.to_num(self.string)
         num2 = self.to_num(other.string)
         return RimMul(self.to_rim(num1 // num2))
@@ -121,5 +122,8 @@ class RimMul:
         elif inti:
             for _ in range(inti):
                 result += "I"
+        else:
+            result += "0"
         return result
+
 
