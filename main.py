@@ -1,5 +1,6 @@
 import sys
 
+
 class RimMul:
     def __init__(self, string="0"):
         self.map = {
