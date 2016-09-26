@@ -2,9 +2,8 @@ import sys
 
 
 class RimMul:
-    def __init__(self, string="0"):
+    def __init__(self, string=""):
         self.map = {
-            "0": 0,
             "I": 1,
             "V": 5,
             "X": 10,
@@ -15,6 +14,8 @@ class RimMul:
         }
         self.check_strange(string)
         self.string = string
+        if string:
+            self.string = self.to_rim(self.to_num(string))
         self.i = 0
 
     def __add__(self, other):
@@ -56,12 +57,18 @@ class RimMul:
             print("Your number incorrect\n")
             sys.exit()
 
+    def test(self):
+        for i in range(1, 4000):
+            rim = self.to_rim(i)
+            print(rim)
+            print(self.to_num(rim))
+
     def to_num(self, string):
         """
         :type string: str
         """
         if not string:
-            print("Fuck you no\n")
+            print("Your number incorrect\n")
             sys.exit()
         result = 0
         size = len(string)
@@ -71,28 +78,45 @@ class RimMul:
 
         while index < size:
             if incorrect >= 3:
-                print("Fuck you no\n")
+                print("Your number incorrect\n")
                 sys.exit()
             first_num = self.map.get(string[index])
+            if not first_num:
+                print("Your number incorrect\n")
+                sys.exit()
+
             if index != size - 1:
                 second_num = self.map.get(string[index + 1])
                 if first_num < second_num:
                     if index > 0:
-                        if first_num == self.map.get(string[index - 1]):
-                            print("Fuck you no\n")
+                        prev = self.map.get(string[index - 1])
+                        if first_num == prev:
+                            print("Your number incorrect\n")
+                            sys.exit()
+                        if prev < first_num:
+                            print("Your number incorrect\n")
                             sys.exit()
                     if second_num == 2 * first_num:
-                        print("Fuck you no\n")
+                        print("Your number incorrect\n")
+                        sys.exit()
+                    if second_num // 10 > first_num:
+                        print("Your number incorrect\n")
                         sys.exit()
                     if first_num == 5 or first_num == 50 or first_num == 500:
-                        print("Fuck you no\n")
+                        print("Your number incorrect\n")
                         sys.exit()
                     result += second_num - first_num
                     index += 2
                     continue
+                if first_num == 5 or first_num == 50 or first_num == 500:
+                    if (size - 1 - index) > 1:
+                        after_num = self.map.get(string[index + 2])
+                        if not (after_num <= first_num // 5):
+                            print("Your number incorrect\n")
+                            sys.exit()
                 if first_num == second_num:
                     if first_num == 5 or first_num == 50 or first_num == 500:
-                        print("Fuck you no\n")
+                        print("Your number incorrect\n")
                         sys.exit()
                     incorrect += 1
                 else:
@@ -108,7 +132,7 @@ class RimMul:
         :type inti: int
         """
         if inti is None:
-            print("Fuck you no\n")
+            print("Your number incorrect\n")
             sys.exit()
         if inti > 3999:
             inti %= 4000
@@ -158,8 +182,10 @@ class RimMul:
                 result += "I"
         return result
 
-    def check_strange(self, string):
-        for idx in range(3, len(string)):
+    @staticmethod
+    def check_strange(string):
+        lenn = len(string)
+        for idx in range(3, lenn):
             rim_num = ""
             if idx == 3:
                 rim_num = "I"
@@ -175,7 +201,7 @@ class RimMul:
                 rim_num = "D"
             elif idx == 15:
                 rim_num = "M"
-            for corrix in range(0, idx):
+            for corrix in range(0, lenn - idx):
                 if string[corrix] == rim_num:
-                    print("Fuck you no\n")
+                    print("Your number incorrect\n")
                     sys.exit()
