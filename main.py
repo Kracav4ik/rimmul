@@ -1,4 +1,4 @@
-import sys
+# encoding: utf-8
 
 
 class RimMul:
@@ -50,12 +50,9 @@ class RimMul:
         else:
             return RimMul()
 
-    def print(self):
-        if self.string:
-            print(self.string)
-        else:
-            print("Your number incorrect\n")
-            sys.exit()
+    def __str__(self):
+        assert self.string, "Your number incorrect"
+        return self.string
 
     def test(self):
         for i in range(1, 4000):
@@ -67,9 +64,7 @@ class RimMul:
         """
         :type string: str
         """
-        if not string:
-            print("Your number incorrect\n")
-            sys.exit()
+        assert string, "Your number incorrect"
         result = 0
         size = len(string)
         index = 0
@@ -77,47 +72,29 @@ class RimMul:
         self.check_strange(string)
 
         while index < size:
-            if incorrect >= 3:
-                print("Your number incorrect\n")
-                sys.exit()
+            assert incorrect < 3, "Your number incorrect"
             first_num = self.map.get(string[index])
-            if not first_num:
-                print("Your number incorrect\n")
-                sys.exit()
+            assert first_num, "Your number incorrect"
 
             if index != size - 1:
                 second_num = self.map.get(string[index + 1])
                 if first_num < second_num:
                     if index > 0:
                         prev = self.map.get(string[index - 1])
-                        if first_num == prev:
-                            print("Your number incorrect\n")
-                            sys.exit()
-                        if prev < first_num:
-                            print("Your number incorrect\n")
-                            sys.exit()
-                    if second_num == 2 * first_num:
-                        print("Your number incorrect\n")
-                        sys.exit()
-                    if second_num // 10 > first_num:
-                        print("Your number incorrect\n")
-                        sys.exit()
-                    if first_num == 5 or first_num == 50 or first_num == 500:
-                        print("Your number incorrect\n")
-                        sys.exit()
+                        assert first_num < prev, "Your number incorrect"
+
+                    assert second_num == 2 * first_num, "Your number incorrect"
+                    assert second_num // 10 <= first_num, "Your number incorrect"
+                    assert not (first_num == 5 or first_num == 50 or first_num == 500), "Your number incorrect"
                     result += second_num - first_num
                     index += 2
                     continue
                 if first_num == 5 or first_num == 50 or first_num == 500:
                     if (size - 1 - index) > 1:
                         after_num = self.map.get(string[index + 2])
-                        if not (after_num <= first_num // 5):
-                            print("Your number incorrect\n")
-                            sys.exit()
+                        assert after_num <= first_num // 5, "Your number incorrect"
                 if first_num == second_num:
-                    if first_num == 5 or first_num == 50 or first_num == 500:
-                        print("Your number incorrect\n")
-                        sys.exit()
+                    assert not (first_num == 5 or first_num == 50 or first_num == 500), "Your number incorrect"
                     incorrect += 1
                 else:
                     incorrect = 0
@@ -131,9 +108,7 @@ class RimMul:
         """
         :type inti: int
         """
-        if inti is None:
-            print("Your number incorrect\n")
-            sys.exit()
+        assert inti is not None, "Your number incorrect"
         if inti > 3999:
             inti %= 4000
         result = ""
@@ -202,6 +177,13 @@ class RimMul:
             elif idx == 15:
                 rim_num = "M"
             for corrix in range(0, lenn - idx):
-                if string[corrix] == rim_num:
-                    print("Your number incorrect\n")
-                    sys.exit()
+                assert string[corrix] != rim_num, "Your number incorrect"
+
+s1 = input("Enter first number >>>")
+rim1 = RimMul(s1)
+s2 = input("Enter second number >>>")
+rim2 = RimMul(s2)
+print(str(rim1), " + ", str(rim2), " = ", str(rim1 + rim2))
+print(str(rim1), " - ", str(rim2), " = ", str(rim1 - rim2))
+print(str(rim1), " * ", str(rim2), " = ", str(rim1 * rim2))
+print(str(rim1), " / ", str(rim2), " = ", str(rim1 / rim2))
